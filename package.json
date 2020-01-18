@@ -3,12 +3,19 @@
   "version": "0.1.0",
   "description": "Simple command to run two commands concurrently",
   "files": [
-    "index.js"
+    "*.js"
   ],
   "bin": {
     "fgbg": "index.js"
   },
+  "scripts": {
+    "check": "tsc"
+  },
   "keywords": [],
   "author": "Francisco Giordano <frangio.1@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^12.12.25",
+    "typescript": "^3.7.5"
+  }
 }

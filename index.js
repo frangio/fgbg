@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-const proc = require('child_process');
 const events = require('events');
+
+const { Pool } = require('./pool');
 
 main();
 
@@ -14,21 +15,15 @@ async function main() {
   const fg = process.argv[2];
   const bg = process.argv.slice(3);
 
-  const children = [];
+  const pool = new Pool;
 
-  children.push(run(fg, 'inherit'));
-  children.push(...bg.map(run));
+  pool.run(fg, 'inherit');
 
-  const exit = children.map(c => events.once(c, 'exit'));
-  exit.push(events.once(process, 'exit'));
-
-  await Promise.race(exit);
-
-  for (const c of children) {
-    c.kill();
+  for (const cmd of bg) {
+    pool.run(cmd);
   }
-}
 
-function run(cmd, stdio = 'ignore') {
-  return proc.spawn(cmd, { stdio, shell: true });
+  await Promise.race([pool.someExit, events.once(process, 'exit')]);
+
+  pool.killAll();
 }
