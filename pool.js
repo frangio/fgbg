@@ -26,7 +26,16 @@ class Pool {
   get someExit() {
     const childrenExit = Array.from(
       this.children.keys(),
-      c => events.once(c, 'exit'),
+      async cmd => {
+        const [code] =
+          /** @type {[number]} */
+          (await events.once(cmd, 'exit'));
+
+        this.exit = {
+          code,
+          cmd: this.children.get(cmd),
+        };
+      }
     );
     return Promise.race(childrenExit);
   }

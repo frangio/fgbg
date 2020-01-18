@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const proc = require('child_process');
 const events = require('events');
 
 const { Pool } = require('./pool');
@@ -15,15 +16,25 @@ async function main() {
   const fg = process.argv[2];
   const bg = process.argv.slice(3);
 
-  const pool = new Pool;
+  const child = proc.spawn(fg, { stdio: 'inherit', shell: true });
 
-  pool.run(fg, 'inherit');
+  const pool = new Pool();
 
   for (const cmd of bg) {
     pool.run(cmd);
   }
 
-  await Promise.race([pool.someExit, events.once(process, 'exit')]);
+  await Promise.race([
+    pool.someExit,
+    events.once(child, 'exit'),
+    events.once(process, 'exit'),
+  ]);
 
   pool.killAll();
+  child.kill();
+
+  if (pool.exit) {
+    console.error(`background command exited early: '${pool.exit.cmd}' (code ${pool.exit.code})`);
+    process.exitCode = 1;
+  }
 }
