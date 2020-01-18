@@ -1,0 +1,14 @@
+{
+  "name": "fgbg",
+  "version": "0.1.0",
+  "description": "Simple command to run two commands concurrently",
+  "files": [
+    "index.js"
+  ],
+  "bin": {
+    "fgbg": "index.js"
+  },
+  "keywords": [],
+  "author": "Francisco Giordano <frangio.1@gmail.com>",
+  "license": "MIT"
+}
