@@ -32,12 +32,13 @@ class Pool {
     const childrenExit = Array.from(
       this.children.keys(),
       async cmd => {
-        const [code] =
-          /** @type {[number]} */
+        const [code, signal] =
+          /** @type {[number, number]} */
           (await events.once(cmd, 'exit'));
 
         this.exit = {
           code,
+          signal,
           cmd: this.children.get(cmd),
         };
       }
@@ -69,7 +70,9 @@ async function main() {
   child.kill();
 
   if (pool.exit) {
-    console.error(`background command exited early: '${pool.exit.cmd}' (code ${pool.exit.code})`);
+    const { code, signal, cmd } = pool.exit;
+    const status = code !== null ? `exit code ${code}` : signal;
+    console.error(`background command exited early: '${pool.exit.cmd}' (${status})`);
     process.exitCode = 1;
   }
 }
