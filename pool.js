@@ -1,20 +1,23 @@
 const proc = require('child_process');
 const events = require('events');
 
-class Pool {
-  constructor() {
-    /** @type Map<proc.ChildProcess, string> */
-    this.children = new Map();
-  }
+/**
+ * @typedef {'ignore' | 'inherit'} Stdio
+ * @param {string} cmd
+ * @param {Stdio} stdio
+ */
+function run(cmd, stdio = 'ignore') {
+  return proc.spawn(cmd, { stdio, shell: true });
+}
 
+class Pool {
   /**
-   * @typedef {'ignore' | 'inherit'} Stdio
-   * @param {string} cmd
-   * @param {Stdio} stdio
+   * @param {string[]} cmds
    */
-  run(cmd, stdio = 'ignore') {
-    const child = proc.spawn(cmd, { stdio, shell: true });
-    this.children.set(child, cmd);
+  constructor(cmds) {
+    this.children = new Map(
+      cmds.map(cmd => [run(cmd), cmd])
+    );
   }
 
   killAll() {
@@ -41,4 +44,4 @@ class Pool {
   }
 }
 
-module.exports = { Pool };
+module.exports = { run, Pool };

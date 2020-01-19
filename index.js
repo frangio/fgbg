@@ -3,7 +3,7 @@
 const proc = require('child_process');
 const events = require('events');
 
-const { Pool } = require('./pool');
+const { run, Pool } = require('./pool');
 
 main();
 
@@ -16,13 +16,9 @@ async function main() {
   const fg = process.argv[2];
   const bg = process.argv.slice(3);
 
-  const child = proc.spawn(fg, { stdio: 'inherit', shell: true });
+  const child = run(fg, 'inherit');
 
-  const pool = new Pool();
-
-  for (const cmd of bg) {
-    pool.run(cmd);
-  }
+  const pool = new Pool(bg);
 
   await Promise.race([
     pool.someExit,
