@@ -1,7 +1,8 @@
 {
   "name": "fgbg",
   "version": "0.1.3",
-  "description": "Simple command to run two commands concurrently",
+  "description": "Lightweight tool to run multiple commands concurrently",
+  "repository": "github:frangio/fgbg",
   "files": [
     "*.js"
   ],
