@@ -3,7 +3,6 @@
     "incremental": true,
     "allowJs": true,
     "checkJs": true,
-    "declaration": true,
     "noEmit": true,
     "strict": true,
     "downlevelIteration": true,
