@@ -64,6 +64,8 @@ async function main() {
     pool.someExit,
     events.once(child, 'exit'),
     events.once(process, 'exit'),
+    events.once(process, 'SIGTERM'),
+    events.once(process, 'SIGINT'),
   ]);
 
   pool.killAll();
