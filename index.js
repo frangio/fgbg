@@ -49,13 +49,28 @@ class Pool {
   }
 }
 
+/**
+ * @template T
+ * @param {T[]} array
+ * @param {T} el
+ * @param {number} [fromIndex]
+ */
+function indexOf(array, el, fromIndex) {
+  const i = array.indexOf(el, fromIndex);
+  if (i === -1) {
+    return undefined;
+  } else {
+    return i;
+  }
+}
+
 async function main() {
   if (process.argv.length < 3) {
     console.error('usage: fgbg <fg> [bg]... [-- <fg arg>...]');
     process.exit(1);
   }
 
-  const argsIndex = Math.max(process.argv.length, process.argv.indexOf('--'));
+  const argsIndex = indexOf(process.argv, '--', 2);
 
   const fg = process.argv[2];
   const bg = process.argv.slice(3, argsIndex);
