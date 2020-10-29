@@ -36,3 +36,11 @@ Or as a script in your `package.json`:
 ```
 npm run test:watch
 ```
+
+## Additional arguments
+
+Forward additional arguments to the foreground command using `--` as a separator.
+
+```
+npx fgbg 'ava --watch' 'tsc --watch' -- src/foo.test.ts
+```
