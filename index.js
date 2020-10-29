@@ -11,7 +11,7 @@ const events = require('events');
  * @param {Stdio} stdio
  */
 function run(cmd, args = [], stdio = 'ignore') {
-  return proc.spawn(cmd, { stdio, shell: true });
+  return proc.spawn(cmd, args, { stdio, shell: true });
 }
 
 class Pool {
