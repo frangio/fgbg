@@ -55,7 +55,7 @@ async function main() {
     process.exit(1);
   }
 
-  const argsIndex = process.argv.indexOf('--');
+  const argsIndex = Math.max(process.argv.length, process.argv.indexOf('--'));
 
   const fg = process.argv[2];
   const bg = process.argv.slice(3, argsIndex);
