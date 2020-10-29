@@ -74,7 +74,7 @@ async function main() {
 
   const fg = process.argv[2];
   const bg = process.argv.slice(3, argsIndex);
-  const args = process.argv.slice(argsIndex);
+  const args = argsIndex ? process.argv.slice(argsIndex + 1) : [];
 
   const child = run(fg, args, 'inherit');
 
