@@ -1,6 +1,6 @@
 {
   "name": "fgbg",
-  "version": "0.1.5-4",
+  "version": "0.1.5",
   "description": "Lightweight tool to run multiple commands concurrently",
   "repository": "github:frangio/fgbg",
   "files": [
