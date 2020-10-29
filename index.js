@@ -6,10 +6,12 @@ const events = require('events');
 /**
  * @typedef {'ignore' | 'inherit'} Stdio
  * @param {string} cmd
+ * @param {string[]} args
+ * @param {'ignore' | 'inherit'} cmd
  * @param {Stdio} stdio
  */
-function run(cmd, stdio = 'ignore') {
-  return proc.spawn(cmd, { stdio, shell: true });
+function run(cmd, args = [], stdio = 'ignore') {
+  return proc.spawn(cmd, args, { stdio, shell: true });
 }
 
 class Pool {
@@ -47,16 +49,34 @@ class Pool {
   }
 }
 
+/**
+ * @template T
+ * @param {T[]} array
+ * @param {T} el
+ * @param {number} [fromIndex]
+ */
+function indexOf(array, el, fromIndex) {
+  const i = array.indexOf(el, fromIndex);
+  if (i === -1) {
+    return undefined;
+  } else {
+    return i;
+  }
+}
+
 async function main() {
   if (process.argv.length < 3) {
-    console.error('usage: fgbg <fg> [bg]...');
+    console.error('usage: fgbg <fg> [bg]... [-- <fg arg>...]');
     process.exit(1);
   }
 
-  const fg = process.argv[2];
-  const bg = process.argv.slice(3);
+  const argsIndex = indexOf(process.argv, '--', 2);
 
-  const child = run(fg, 'inherit');
+  const fg = process.argv[2];
+  const bg = process.argv.slice(3, argsIndex);
+  const args = argsIndex ? process.argv.slice(argsIndex + 1) : [];
+
+  const child = run(fg, args, 'inherit');
 
   const pool = new Pool(bg);
 
